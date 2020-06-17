@@ -1,0 +1,60 @@
+.arrow {
+  position: absolute;
+  top: 3.7px;
+  width: 0;
+  height: 0;
+  border-left-color: transparent;
+  border-top-color: transparent;
+  transform: rotate(-45deg);
+  border-radius: 2px;
+}
+
+.flow {
+  display: flex;
+  padding-right: 20px;
+  :global {
+    .ant-btn {
+      border: none;
+      padding: 0;
+    }
+    .ant-btn[disabled]:hover {
+      color: #fff;
+    }
+  }
+
+  .item {
+    background-color: rgb(72, 144, 248);
+    color: #fff;
+    width: 75px;
+    text-align: center;
+    line-height: 32px;
+    margin-right: 2px;
+    position: relative;
+    border-radius: 2px;
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
+    font-size: 12px;
+    user-select: none;
+    .leftcorner {
+      .arrow();
+      left: -13px;
+      z-index: 9;
+      border: 11.7px solid #fff;
+    }
+    .corner {
+      .arrow();
+      left: 61.4px;
+      border: 11.7px solid rgb(72, 144, 248);
+      z-index: 10;
+    }
+
+    .flowItem {
+      z-index: 20;
+      height: 100%;
+      width: 80%;
+      color: #fff;
+      background-color: transparent;
+      font-size: 12px;
+    }
+  }
+}
