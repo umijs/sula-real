@@ -1,5 +1,11 @@
 # sula-real
 
+## 特点
+
+- 💻 真实还原开发场景，贴近项目开发代码，非理想才最 real
+- 🚀 选取前端中台最典型场景开发
+- 🥗 除 [sula](https://github.com/umijs/sula-real) 外，仅依赖 [@umijs/preset-react](https://umijs.org/plugins/preset-react) 和 [@ant-design/pro-layout](https://github.com/ant-design/ant-design-pro-layout)
+
 
 ## 启动
 

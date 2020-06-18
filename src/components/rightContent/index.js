@@ -11,7 +11,7 @@ export default () => {
         <Tooltip title="github">
           <GithubOutlined
             onClick={() => {
-              window.open('https://github.com/umijs/sula');
+              window.open('https://github.com/umijs/sula-real');
             }}
             style={{
               color: '#24292f',
