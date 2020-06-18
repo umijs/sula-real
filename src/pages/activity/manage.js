@@ -1,69 +1,9 @@
 import React from 'react';
 import { QueryTable } from 'sula';
 import access from '@/components/access';
-import { parse } from 'querystring';
-import { history } from 'umi';
 
 class ActivityManage extends React.Component {
-  state = {
-    init: false,
-    key: false,
-    hashChange: true,
-  };
-
   format = this.props.formatMessage;
-
-  componentDidMount() {
-    this.setState({
-      init: true,
-    });
-
-    this.listenHistory();
-  }
-
-  componentWillUnmount() {
-    this.unlisten();
-  }
-
-  unlisten = () => {
-    window.removeEventListener('hashchange', this.onHistoryChange);
-  };
-
-  setPaging = data => {
-    const { pageSize, current, columnKey, order, ...restParams } = data;
-
-    this.table.setFilters(restParams);
-    this.table.setPagination({
-      current: Number(current),
-      pageSize: Number(pageSize),
-    });
-    this.table.setSorter({ order, columnKey });
-  };
-
-  onHistoryChange = event => {
-    const { newURL } = event;
-
-    // 同步视图 table内部状态 url更新
-    const search = newURL.split('?')[1];
-    this.setPaging(parse(search));
-
-    this.setState(
-      {
-        init: false,
-        key: !this.state.key,
-        hashChange: true,
-      },
-      () => {
-        this.setState({
-          hashChange: false,
-        });
-      },
-    );
-  };
-
-  listenHistory = () => {
-    window.addEventListener('hashchange', this.onHistoryChange);
-  };
 
   config = {
     rowKey: 'id',
@@ -210,86 +150,17 @@ class ActivityManage extends React.Component {
     remoteDataSource: {
       url: '/api/activity/list.json',
       method: 'POST',
-      convertParams: ({ params, table }) => {
-        this.unlisten();
-        const { init } = this.state;
-        let urlParams = {};
-        this.table = table;
-        if (!init) {
-          // 任意url跳转到该页面时，拼接参数到url
-          const { search } = history.location;
-          if (search) {
-            history.push(search);
-            urlParams = parse(search.slice(1));
-
-            const {
-              pageSize,
-              current,
-              columnKey,
-              order,
-              ...restParams
-            } = urlParams;
-
-            urlParams = {
-              pageSize,
-              current,
-              sorter: {
-                columnKey,
-                order,
-              },
-              filters: restParams,
-            };
-
-            // 如果是hash变化，则从hash里拿参数
-            const finalParams = this.state.hashChange
-              ? Object.assign({}, params, urlParams)
-              : Object.assign({}, urlParams, params);
-
-            if (!this.state.hashChange) {
-              addParamsToPath(finalParams);
-            }
-
-            // 后台数据不统一，处理数据
-            const {
-              current: finalCurrent,
-              pageSize: finalPageSize,
-              ...restFinalParams
-            } = finalParams;
-
-            this.setPaging({
-              current: finalCurrent,
-              pageSize: finalPageSize,
-              ...finalParams.sorter,
-              ...finalParams.filters,
-            });
-
-            return {
-              currentPage: finalCurrent,
-              size: finalPageSize,
-              ...restFinalParams,
-            };
-          }
-        }
-
-        addParamsToPath(params);
-
-        // 后台数据不统一，处理数据
-        const {
-          current: finalCurrent,
-          pageSize: finalPageSize,
-          ...restFinalParams
-        } = params;
+      convertParams: ({ params }) => {
+        const { current, pageSize, ...restParams } = params;
 
         return {
-          currentPage: finalCurrent,
-          size: finalPageSize,
-          ...restFinalParams,
+          currentPage: current,
+          size: pageSize,
+          ...restParams,
         };
       },
       converter: ({ data }) => {
         const { pageData, currentPage, size, total } = data;
-        this.unlisten();
-        this.listenHistory();
         return {
           list: pageData,
           current: currentPage,
@@ -301,36 +172,8 @@ class ActivityManage extends React.Component {
   };
 
   render() {
-    return <QueryTable {...this.config} key={this.state.key} />;
+    return <QueryTable {...this.config} />;
   }
 }
 
 export default access(ActivityManage);
-
-function addParamsToPath(params) {
-  const { current, pageSize, sorter, filters = {} } = params;
-  const { order, columnKey } = sorter || {};
-
-  let paramsList = [
-    { key: 'current', value: current },
-    { key: 'pageSize', value: pageSize },
-    { key: 'columnKey', value: columnKey },
-    { key: 'order', value: order },
-  ];
-
-  Object.keys(filters).forEach(key => {
-    paramsList.push({
-      key,
-      value: filters[key],
-    });
-  });
-
-  paramsList = paramsList.filter(
-    ele => ele.value !== undefined && ele.value !== null,
-  );
-
-  const searchList = paramsList.map(({ key, value }) => `${key}=${value}`);
-
-  const search = '?' + searchList.join('&');
-  history.push(search);
-}
