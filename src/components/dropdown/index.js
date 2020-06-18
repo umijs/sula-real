@@ -25,6 +25,13 @@ class OperatorDropdown extends React.Component {
     this.setState({ visible: flag });
   };
 
+  // 组件卸载后阻止异步操作
+  componentWillUnmount() {
+    this.setState = () => {
+      return;
+    }
+  }
+
   overlay = () => {
     const { ctx, config } = this.props;
     const { render = [] } = config;

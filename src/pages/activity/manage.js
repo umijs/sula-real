@@ -4,6 +4,12 @@ import access from '@/components/access';
 
 class ActivityManage extends React.Component {
   format = this.props.formatMessage;
+  
+  componentWillUnmount() {
+    this.setState = (state, callback) => {
+      return
+    }
+  }
 
   config = {
     rowKey: 'id',

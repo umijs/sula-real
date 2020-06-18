@@ -1,4 +1,3 @@
-
 // 抽屉模块框配置
 export function filterConfig(configParams) {
   const { mode, id, format } = configParams || {};
@@ -53,7 +52,7 @@ export function filterConfig(configParams) {
           style: { width: '100%' },
           valueFormat: 'utc',
           format: 'YYYY-MM-DD HH:mm:ss',
-          showTime: { format: 'HH:mm:ss' }
+          showTime: { format: 'HH:mm:ss' },
         },
       },
       rules: [
@@ -102,16 +101,18 @@ export function filterConfig(configParams) {
       },
     },
   ];
+  // 审核、查看灰度、灰度编辑
   if (mode === 'audit' || mode === 'auditView' || mode === 'grayscaleEdit') {
     let titleFinally = format({ id: 'audit' });
     let modeFinally = 'edit';
     let submitButtonText = format({ id: 'submitBtn.text' });
     if (mode === 'auditView') {
       modeFinally = 'view';
+      titleFinally = format({ id: 'view' });
     } else if (mode === 'grayscaleEdit') {
-      titleFinally = format({ id: 'edit' })
+      titleFinally = format({ id: 'edit' });
     } else {
-      submitButtonText = format({ id: 'submitAuditBtn.text' })
+      submitButtonText = format({ id: 'submitAuditBtn.text' });
     }
     const fieldsTem = {
       name: 'grayScale',
@@ -159,6 +160,7 @@ export function filterConfig(configParams) {
       },
     };
   }
+  // 编辑
   if (mode === 'edit') {
     return {
       title: format({ id: 'edit' }),
@@ -173,10 +175,11 @@ export function filterConfig(configParams) {
         url: '/api/release/edit.json',
         method: 'post',
         params: { id },
-        successMessage: format({ id: 'edit.success' })
+        successMessage: format({ id: 'edit.success' }),
       },
     };
   }
+  // 查看
   if (mode === 'view') {
     return {
       title: format({ id: 'view' }),
@@ -196,7 +199,7 @@ export function filterConfig(configParams) {
     submit: {
       url: '/api/release/create.json',
       method: 'post',
-      successMessage: format({ id: 'create.success' })
+      successMessage: format({ id: 'create.success' }),
     },
   };
 }

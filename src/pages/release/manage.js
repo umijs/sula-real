@@ -260,6 +260,23 @@ class PublishRelease extends React.Component {
               ],
             },
             {
+              // 灰度查看
+              type: 'icon',
+              text: this.format({ id: 'view' }),
+              tooltip: this.format({ id: 'view' }),
+              funcProps: {
+                visible: ctx => ctx.text === 'G',
+              },
+              props: {
+                type: 'eye',
+              },
+              action: [
+                ({ record, table }) => {
+                  this.getDrawerForm('auditView', record.id, table);
+                },
+              ],
+            },
+            {
               // 审核中
               type: 'icon',
               text: this.format({ id: 'audit' }),

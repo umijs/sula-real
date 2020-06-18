@@ -29,15 +29,12 @@ class OperationGroup extends React.Component {
         const { visible: funcVisible } = funcProps;
         return !(visible === false || funcVisible === false);
       })
-      .map(({
-        funcProps,
-        ...others
-      }) => {
+      .map(({ funcProps, ...others }) => {
         const { visible: funcVisibleTem, ...funcPropsOthers } = funcProps || {};
         return {
           ...funcPropsOthers,
-          ...others
-        }
+          ...others,
+        };
       });
 
     if (Array.isArray(renders) && renders.length > 0) {
@@ -81,7 +78,11 @@ class OperationGroup extends React.Component {
         });
 
         arrAfterRender = (
-          <Dropdown ctx={ctx} config={{ render: finalAfterRender }} key={ctx.record.id} />
+          <Dropdown
+            ctx={ctx}
+            config={{ render: finalAfterRender }}
+            key={ctx.record.id}
+          />
         );
       }
       return [arrBeforeRender, arrAfterRender];
@@ -89,8 +90,14 @@ class OperationGroup extends React.Component {
   };
 
   render() {
-    const { config: { props = {}, spaceSize = 'small' } } = this.props;
-    return <Space size={spaceSize} style={props.style || {}}>{this.renderOperating()}</Space>
+    const {
+      config: { props = {}, spaceSize = 'small' },
+    } = this.props;
+    return (
+      <Space size={spaceSize} style={props.style || {}}>
+        {this.renderOperating()}
+      </Space>
+    );
   }
 }
 

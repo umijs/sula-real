@@ -1,90 +1,108 @@
 import React from 'react';
-import Graphin from '@antv/graphin';
+import G6 from '@antv/g6';
 import { Descriptions, Card } from 'antd';
 import GraphTooltip from './tooltip';
-import { handleResize } from './util';
+import { getSize } from './util';
 
-const source = {
+const data = {
   nodes: [
     {
-      name: '商家',
-      type: 'amazon-square-fill',
+      id: '0',
+      label: '0',
     },
     {
-      name: 'A某',
-      type: 'user',
+      id: '1',
+      label: '1',
     },
     {
-      name: 'B某',
-      type: 'user',
+      id: '2',
+      label: '2',
     },
     {
-      name: 'C某',
-      type: 'user',
+      id: '3',
+      label: '3',
     },
     {
-      name: '银行卡',
-      type: 'credit card',
+      id: '4',
+      label: '4',
+    },
+    {
+      id: '5',
+      label: '5',
+    },
+    {
+      id: '6',
+      label: '6',
+    },
+    {
+      id: '7',
+      label: '7',
+    },
+    {
+      id: '8',
+      label: '8',
+    },
+    {
+      id: '9',
+      label: '9',
     },
   ],
   edges: [
     {
-      source: 'A某',
-      target: '银行卡',
-      relative: '转账1000元',
+      source: '0',
+      target: '1',
     },
     {
-      source: '银行卡',
-      target: 'B某',
-      relative: '常用银行卡',
+      source: '0',
+      target: '2',
     },
     {
-      source: 'B某',
-      target: 'C某',
-      relative: '亲友',
+      source: '0',
+      target: '3',
     },
     {
-      source: 'C某',
-      target: '商家',
-      relative: '交易1200元',
+      source: '0',
+      target: '4',
     },
     {
-      source: '商家',
-      target: 'A某',
-      relative: '同人',
-      lineType: 'dash',
+      source: '0',
+      target: '5',
     },
-  ],
+    {
+      source: '0',
+      target: '7',
+    },
+    {
+      source: '0',
+      target: '8',
+    },
+    {
+      source: '0',
+      target: '9',
+    },
+    {
+      source: '2',
+      target: '3',
+    },
+    {
+      source: '4',
+      target: '5',
+    },
+    {
+      source: '4',
+      target: '6',
+    },
+    {
+      source: '5',
+      target: '6',
+    },
+  ].map(item => {
+    return {
+      ...item,
+      label: `${item.source}->${item.target}`,
+    }
+  }),
 };
-
-const nodes = source.nodes.map(node => {
-  return {
-    data: node,
-    shape: 'CircleNode',
-    id: node.name,
-    label: node.name,
-    style: {
-      icon: node.type,
-      fontFamily: 'graphin',
-      nodeSize: 18,
-    },
-  };
-});
-
-const edges = source.edges.map(edge => {
-  return {
-    data: edge,
-    source: edge.source,
-    target: edge.target,
-    shape: 'LineEdge',
-    label: edge.relative,
-    style: {
-      line: {
-        dash: edge.lineType === 'dash' ? [2, 2] : 0,
-      },
-    },
-  };
-});
 
 class Relation extends React.Component {
   state = {
@@ -96,15 +114,58 @@ class Relation extends React.Component {
   };
 
   containerRef = React.createRef();
-  graphRef = React.createRef();
   componentDidMount() {
-    const { graph } = this.graphRef.current;
-    handleResize(this.containerRef.current, graph);
-    // 模拟服务端请求回的数据
-    this.setState({
-      nodes,
-      edges,
+
+    const { width, height } = getSize(this.containerRef.current);
+    console.log('height: ', height);
+
+    const graph = new G6.Graph({
+      container: this.containerRef.current,
+      width,
+      height,
+      layout: {
+        type: 'force',
+        preventOverlap: true,
+        linkDistance: 140,
+      },
+      modes: {
+        default: ['drag-node'],
+      },
+      defaultNode: {
+        size: 24,
+        color: '#5B8FF9',
+        style: {
+          lineWidth: 2,
+          fill: '#C6E5FF',
+        },
+      },
+      defaultEdge: {
+        size: 1,
+        color: '#e2e2e2',
+        labelCfg: {
+          autoRotate: true,
+          refY: 0,
+          style: {
+            background: {
+              fill: '#ffffff',
+              padding: [4,4,4,4],
+            },
+          }
+        },
+        style: {
+          endArrow: {
+            path: 'M 0,0 L 5,3 L 5,-3 Z',
+            fill: '#e2e2e2',
+            stroke: '#e2e2e2',
+            // ...
+          }
+        }
+      },
     });
+
+    graph.data(data);
+    graph.render();
+
 
     graph.on('node:mouseenter', e => {
       const { item } = e;
@@ -113,8 +174,8 @@ class Relation extends React.Component {
       const point = graph.getCanvasByPoint(x, y);
 
       this.setState({
-        tooltipX: point.x + 9,
-        tooltipY: point.y + 9,
+        tooltipX: point.x + 24,
+        tooltipY: point.y - 24,
         tooltipVis: true,
       });
     });
@@ -126,42 +187,31 @@ class Relation extends React.Component {
     });
   }
   render() {
-    const { nodes, edges, tooltipVis, tooltipX, tooltipY } = this.state;
+    const { tooltipVis, tooltipX, tooltipY } = this.state;
     return (
-      <Card title="交易关系">
-        <div
-          ref={this.containerRef}
-          style={{
-            height: 'calc(100vh - 200px)',
-            background: '#fff',
-            position: 'relative',
-          }}
-        >
-          <Graphin
-            ref={this.graphRef}
-            data={{
-              nodes,
-              edges,
-            }}
-            layout={{
-              name: 'force',
+      <div>
+        <Card title="交易关系">
+          <div
+            ref={this.containerRef}
+            style={{
+              height: 'calc(100vh - 200px)',
+              background: '#fff',
+              position: 'relative',
             }}
           />
-          {tooltipVis ? (
-            <GraphTooltip x={tooltipX} y={tooltipY}>
-              <Descriptions bordered size="small" column={2}>
-                <Descriptions.Item label="Item">
-                  海外购物
-                </Descriptions.Item>
-                <Descriptions.Item label="Category">花费</Descriptions.Item>
-                <Descriptions.Item label="Discount">20%</Descriptions.Item>
-                <Descriptions.Item label="Total">$60.00</Descriptions.Item>
-                <Descriptions.Item label="Other">$10.00</Descriptions.Item>
-              </Descriptions>
-            </GraphTooltip>
-          ) : null}
-        </div>
-      </Card>
+        </Card>
+        {tooltipVis ? (
+          <GraphTooltip x={tooltipX} y={tooltipY}>
+            <Descriptions bordered size="small" column={2}>
+              <Descriptions.Item label="Item">海外购物</Descriptions.Item>
+              <Descriptions.Item label="Category">花费</Descriptions.Item>
+              <Descriptions.Item label="Discount">20%</Descriptions.Item>
+              <Descriptions.Item label="Total">$60.00</Descriptions.Item>
+              <Descriptions.Item label="Other">$10.00</Descriptions.Item>
+            </Descriptions>
+          </GraphTooltip>
+        ) : null}
+      </div>
     );
   }
 }

@@ -16,7 +16,9 @@ class StatusView extends React.Component {
       statusList.map((item, index) => {
         const { key, statusSuffix = '', value, children: childrenVal } = item;
         if (key === children) {
-          childrenTex = `${childrenVal || value} ${statusSuffix ? statusSuffix + '%' : ''}`;
+          childrenTex = `${childrenVal || value} ${
+            statusSuffix ? statusSuffix + '%' : ''
+          }`;
           color = item.color;
         }
         return (

@@ -1,4 +1,4 @@
-function getSize(elem) {
+export const getSize = (elem) => {
   const style = window.getComputedStyle
     ? window.getComputedStyle(elem)
     : elem.style;
