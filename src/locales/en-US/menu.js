@@ -23,4 +23,7 @@ export default {
 
   'menu.charts': 'Charts',
   'menu.charts.basic': 'Basic',
+
+  'menu.graphviz': 'Topo',
+  'menu.graphviz.relation': 'Relation',
 };

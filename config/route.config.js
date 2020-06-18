@@ -157,6 +157,23 @@ export default [
     ],
   },
   {
+    name: 'graphviz',
+    icon: 'BranchesOutlined',
+    component: '../layout',
+    path: '/graphviz',
+    routes: [
+      {
+        path: '/graphviz',
+        redirect: '/graphviz/relation',
+      },
+      {
+        path: '/graphviz/relation',
+        name: 'relation',
+        component: './graphviz/relation',
+      },
+    ],
+  },
+  {
     component: './exception/404',
   },
 ];

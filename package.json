@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@ant-design/pro-layout": "5.0.15",
+    "@antv/graphin": "^1.4.1",
     "@sula/charts": "^1.0.0-alpha.6",
     "antd": "^4.3.1",
     "sula": "^1.0.0-alpha.44"

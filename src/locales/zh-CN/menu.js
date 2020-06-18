@@ -23,4 +23,7 @@ export default {
 
   'menu.charts': '图表',
   'menu.charts.basic': '基础图表',
+
+  'menu.graphviz': '拓扑图',
+  'menu.graphviz.relation': '关系图',
 };
