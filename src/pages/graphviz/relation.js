@@ -1,6 +1,6 @@
 import React from 'react';
 import Graphin from '@antv/graphin';
-import { Timeline, Card } from 'antd';
+import { Descriptions, Card } from 'antd';
 import GraphTooltip from './tooltip';
 import { handleResize } from './util';
 
@@ -149,12 +149,15 @@ class Relation extends React.Component {
           />
           {tooltipVis ? (
             <GraphTooltip x={tooltipX} y={tooltipY}>
-              <Timeline>
-                <Timeline.Item>2015-09-01 消费100</Timeline.Item>
-                <Timeline.Item>2015-09-02 消费300</Timeline.Item>
-                <Timeline.Item>2015-09-03 消费200</Timeline.Item>
-                <Timeline.Item>2015-09-04 消费400</Timeline.Item>
-              </Timeline>
+              <Descriptions bordered size="small" column={2}>
+                <Descriptions.Item label="Item">
+                  海外购物
+                </Descriptions.Item>
+                <Descriptions.Item label="Category">花费</Descriptions.Item>
+                <Descriptions.Item label="Discount">20%</Descriptions.Item>
+                <Descriptions.Item label="Total">$60.00</Descriptions.Item>
+                <Descriptions.Item label="Other">$10.00</Descriptions.Item>
+              </Descriptions>
             </GraphTooltip>
           ) : null}
         </div>
