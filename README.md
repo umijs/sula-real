@@ -10,6 +10,13 @@
 ## 启动
 
 ```bash
+$ mkdir real-demo
+
+$ cd real-demo
+
+// cnpm i -g degit
+$ degit https://github.com/umijs/sula-real.git
+
 $ npm i
 
 $ npm start
