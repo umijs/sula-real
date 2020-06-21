@@ -23,7 +23,6 @@ import {
 import Mock from 'mockjs';
 
 import 'antd/dist/antd.min.css';
-import '@antv/graphin/dist/index.css';
 import './plugins';
 
 import '../mock/flow.mock';
