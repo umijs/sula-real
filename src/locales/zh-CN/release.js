@@ -33,6 +33,8 @@ export default {
   'proportionGrayscale.placeholder': '请输入灰度比例',
 
   grayscale: '灰度中',
+  'grayscale.release': '灰度发布',
+  
   'grayscale.button.confirm': '确认要批量发布吗？',
   'grayscale.button.text': '批量发布',
   'grayscale.change.button.children': '修改灰度比例',

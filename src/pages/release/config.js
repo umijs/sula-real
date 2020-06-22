@@ -1,6 +1,4 @@
-// 抽屉模块框配置
-export function filterConfig(configParams) {
-  const { mode, id, format } = configParams || {};
+export const fieldsConfig = (type, format) => {
   const fields = [
     {
       name: 'iterateName',
@@ -101,105 +99,31 @@ export function filterConfig(configParams) {
       },
     },
   ];
-  // 审核、查看灰度、灰度编辑
-  if (mode === 'audit' || mode === 'auditView' || mode === 'grayscaleEdit') {
-    let titleFinally = format({ id: 'audit' });
-    let modeFinally = 'edit';
-    let submitButtonText = format({ id: 'submitBtn.text' });
-    if (mode === 'auditView') {
-      modeFinally = 'view';
-      titleFinally = format({ id: 'view' });
-    } else if (mode === 'grayscaleEdit') {
-      titleFinally = format({ id: 'edit' });
-    } else {
-      submitButtonText = format({ id: 'submitAuditBtn.text' });
-    }
-    const fieldsTem = {
-      name: 'grayScale',
-      label: format({ id: 'proportionGrayscale.name' }),
-      field: {
-        type: 'inputnumber',
-        props: {
-          placeholder: format({ id: 'proportionGrayscale.placeholder' }),
-          style: { width: '100%' },
-          formatter: value => value && `${value}%`,
-          min: 10,
-          max: 100,
-        },
+
+  const fieldsTem = {
+    name: 'grayScale',
+    label: format({ id: 'proportionGrayscale.name' }),
+    field: {
+      type: 'inputnumber',
+      props: {
+        placeholder: format({ id: 'proportionGrayscale.placeholder' }),
+        style: { width: '100%' },
+        formatter: value => value && `${value}%`,
+        min: 10,
+        max: 100,
       },
-      rules: [
-        {
-          required: true,
-          message: format({ id: 'proportionGrayscale.placeholder' }),
-        },
-      ],
-    };
-    fields.splice(fields.length - 1, 0, fieldsTem);
-    return {
-      title: titleFinally,
-      mode: modeFinally,
-      fields,
-      remoteValues: {
-        url: '/api/release/detail.json',
-        params: { id },
-        method: 'post',
-      },
-      submitButtonProps: {
-        children: submitButtonText,
-      },
-      submit: {
-        url: '/api/release/grayscalePublish.json',
-        method: 'post',
-        params: {
-          id,
-          action: 'G',
-        },
-        converter: ({ data }) => {
-          return { ...data, action: 'G' };
-        },
-      },
-    };
-  }
-  // 编辑
-  if (mode === 'edit') {
-    return {
-      title: format({ id: 'edit' }),
-      fields,
-      mode,
-      remoteValues: {
-        url: '/api/release/detail.json',
-        params: { id },
-        method: 'post',
-      },
-      submit: {
-        url: '/api/release/edit.json',
-        method: 'post',
-        params: { id },
-        successMessage: format({ id: 'edit.success' }),
-      },
-    };
-  }
-  // 查看
-  if (mode === 'view') {
-    return {
-      title: format({ id: 'view' }),
-      mode: 'view',
-      fields,
-      remoteValues: {
-        url: '/api/release/detail.json',
-        params: { id },
-        method: 'post',
-      },
-    };
-  }
-  return {
-    title: format({ id: 'create' }),
-    type: 'drawerform',
-    fields,
-    submit: {
-      url: '/api/release/create.json',
-      method: 'post',
-      successMessage: format({ id: 'create.success' }),
     },
+    rules: [
+      {
+        required: true,
+        message: format({ id: 'proportionGrayscale.placeholder' }),
+      },
+    ],
   };
+
+  // 灰度编辑、查看 添加灰度比例项
+  if (type === 'grayscale') {
+    fields.splice(fields.length - 1, 0, fieldsTem);
+  }
+  return fields;
 }

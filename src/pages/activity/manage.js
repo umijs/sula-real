@@ -6,7 +6,7 @@ class ActivityManage extends React.Component {
   format = this.props.formatMessage;
   
   componentWillUnmount() {
-    this.setState = (state, callback) => {
+    this.setState = () => {
       return
     }
   }

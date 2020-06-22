@@ -33,6 +33,7 @@ export default {
   'proportionGrayscale.placeholder': 'please input gray scale',
 
   grayscale: 'Grayscale',
+  'grayscale.release': 'Grayscale Release',
   'grayscale.button.confirm': 'confirm to batch release',
   'grayscale.button.text': 'Release',
   'grayscale.change.button.children': 'Modify Grayscale',

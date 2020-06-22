@@ -5,7 +5,7 @@
     "start": "umi dev",
     "build": "umi build",
     "predeploy": "npm run build",
-    "deploy": "vercel deploy ./dist --name real --prod --confirm"
+    "deploy": "now deploy ./dist --name real --prod --confirm"
   },
   "dependencies": {
     "@ant-design/pro-layout": "5.0.15",

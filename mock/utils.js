@@ -33,15 +33,17 @@ export function parseGetParams(data) {
 export function statusFilter(status, dataSource) {
   switch (status) {
     case 'grayscale':
-      return dataSource.filter(item => item.status === 'G');
+      return dataSource.filter(
+        item => item.status === 'G'
+      );
     case 'publish':
       return dataSource.filter(
-        item => item.status === 'R' || item.status === 'O',
+        item => item.status === 'R' || item.status === 'O'
       );
     case 'noPublish':
     default:
       return dataSource.filter(
-        item => item.status === 'A' || item.status === 'D',
+        item => item.status === 'A' || item.status === 'D' || item.status === 'W',
       );
   }
 }

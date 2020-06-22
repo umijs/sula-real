@@ -3,7 +3,7 @@ import { getManageData, logInfo, statusFilter, success } from './utils';
 
 let dataSource = [];
 let idMax = 0;
-const statusList = ['D', 'A', 'G', 'R', 'O'];
+const statusList = ['D', 'A', 'G', 'R', 'O', 'W'];
 const principalList = [
   {
     value: 'limengqi',
@@ -130,22 +130,6 @@ mock('/api/release/submitReview.json', 'post', req => {
   return success;
 });
 
-// 灰度发布
-mock('/api/release/grayscalePublish.json', 'post', req => {
-  const { id, action } = JSON.parse(req.body);
-  const index = dataSource.findIndex(ele => ele.id === id);
-  const dataSourceTem = dataSource[index];
-  dataSource = dataSource.filter(c => c.id !== id);
-  dataSource.unshift({
-    ...dataSourceTem,
-    ...JSON.parse(req.body),
-    createTime: Random.now(),
-    status: action,
-  });
-  logInfo(req, success);
-  return success;
-});
-
 // 发布、下线、灰度发布、回滚
 mock('/api/release/publish.json', 'post', req => {
   const { id, action } = JSON.parse(req.body);
@@ -207,6 +191,38 @@ mock('/api/release/changeProportion.json', 'post', req => {
   logInfo(req, success);
   return success;
 });
+
+// 审核
+mock('/api/release/audit.json', 'post', req => {
+  const { id, action } = JSON.parse(req.body);
+  const index = dataSource.findIndex(ele => ele.id === id);
+  const dataSourceTem = dataSource[index];
+  dataSource = dataSource.filter(c => c.id !== id);
+  dataSource.unshift({
+    ...dataSourceTem,
+    ...JSON.parse(req.body),
+    createTime: Random.now(),
+    status: action,
+  });
+  logInfo(req, success);
+  return success;
+});
+
+// 灰度发布
+mock('/api/release/grayScaleRelease.json', 'post', req => {
+  const { id, grayScale, action } = JSON.parse(req.body);
+  const index = dataSource.findIndex(ele => ele.id === id);
+  const dataSourceTem = dataSource[index];
+  dataSource = dataSource.filter(c => c.id !== id);
+  dataSource.unshift({
+    ...dataSourceTem,
+    createTime: Random.now(),
+    status: action,
+    grayScale,
+  });
+  logInfo(req, success);
+  return success;
+})
 
 // 批量删除
 mock('/api/release/batchDelete.json', 'post', req => {

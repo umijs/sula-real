@@ -1,7 +1,7 @@
 import React from 'react';
 import { StepQueryTable, ModalForm, Text } from 'sula';
 import access from '@/components/access';
-import { filterConfig } from './config';
+import { fieldsConfig } from './config';
 
 function principal(text) {
   switch (text) {
@@ -17,42 +17,22 @@ function principal(text) {
 
 class PublishRelease extends React.Component {
   stepQueryTableRef = React.createRef(null);
-  modalRef = React.createRef(null); // modalForm 实例
   format = this.props.formatMessage;
 
   jumpSteps = action => {
+    const { handleStepChange } = this.stepQueryTableRef || {};
     switch (action) {
       case 'G':
-        return this.stepQueryTableRef.handleStepChange(1);
+        return handleStepChange(1);
       case 'R':
       case 'O':
-        return this.stepQueryTableRef.handleStepChange(2);
+        return handleStepChange(2);
       case 'A':
       case 'D':
+      case 'W':
       default:
-        return this.stepQueryTableRef.handleStepChange(0);
+        return handleStepChange(0);
     }
-  };
-
-  // 创建、编辑、查看、审核操作（抽屉）
-  getDrawerForm = (mode, id, table) => {
-    const configParams = { mode, id, format: this.format };
-    if (mode === 'create') {
-      return filterConfig(configParams);
-    }
-    this.modalRef
-      .show({
-        ...filterConfig(configParams)
-      })
-      .then(results => {
-        const { $submit = {} } = results || {};
-        if (results) {
-          if ($submit.action) {
-            this.jumpSteps($submit.action);
-          }
-          table.refreshTable();
-        }
-      });
   };
 
   // StepQueryTable配置
@@ -79,11 +59,9 @@ class PublishRelease extends React.Component {
         },
       },
     ],
-
     rowKey: 'id',
     layout: 'vertical',
     rowSelection: {},
-
     columns: [
       {
         key: 'iterateId',
@@ -142,6 +120,7 @@ class PublishRelease extends React.Component {
           spaceSize: 'middle',
           props: {
             children: '#{text}',
+            // 操作和状态中的状态列表配置
             statusList: [
               {
                 key: 'D',
@@ -154,11 +133,18 @@ class PublishRelease extends React.Component {
                 color: 'warning',
               },
               {
+                key: 'W',
+                value: '待灰度',
+                color: 'volcano',
+              },
+              {
                 key: 'G',
                 value: this.format({ id: 'grayscale' }),
-                children: this.format({ id: 'grayscale.change.button.action.label' }),
-                color: 'default',
-                statusSuffix: '#{record.grayScale}', // 状态后缀
+                children: this.format({
+                  id: 'grayscale.change.button.action.label',
+                }),
+                color: 'success',
+                statusSuffix: '#{record.grayScale}', // 状态文本后缀
               },
               {
                 key: 'R',
@@ -171,7 +157,8 @@ class PublishRelease extends React.Component {
                 color: 'default',
               },
             ],
-            style: {    // style透传到OperationGroup组件中
+            // style透传到OperationGroup组件中
+            style: {
               marginTop: '4px',
             },
           },
@@ -186,7 +173,7 @@ class PublishRelease extends React.Component {
               text: this.format({ id: 'audit.send' }),
               tooltip: this.format({ id: 'audit.send' }),
               funcProps: {
-                visible: ctx => ctx.text === 'D'
+                visible: ctx => ctx.text === 'D',
               },
               props: {
                 type: 'audit',
@@ -195,14 +182,10 @@ class PublishRelease extends React.Component {
                 {
                   url: '/api/release/submitReview.json',
                   method: 'post',
+                  successMessage: this.format({ id: 'confirm.successMessage' }),
                   params: {
                     action: 'A',
-                  },
-                  convertParams: ctx => {
-                    return {
-                      ...ctx.params,
-                      id: ctx.record.id,
-                    };
+                    id: '#{record.id}',
                   },
                 },
                 'refreshTable',
@@ -220,8 +203,16 @@ class PublishRelease extends React.Component {
                 type: 'eye',
               },
               action: [
-                ({ record, table }) => {
-                  this.getDrawerForm('view', record.id, table);
+                {
+                  type: 'drawerform',
+                  title: this.format({ id: 'view' }),
+                  mode: 'view',
+                  remoteValues: {
+                    url: '/api/release/detail.json',
+                    params: { id: '#{record.id}' },
+                    method: 'post',
+                  },
+                  fields: fieldsConfig('view', this.format),
                 },
               ],
             },
@@ -231,14 +222,31 @@ class PublishRelease extends React.Component {
               text: this.format({ id: 'edit' }),
               tooltip: this.format({ id: 'edit' }),
               funcProps: {
-                visible: ctx => ctx.text === 'D',
+                visible: ctx => ctx.text === 'D' || ctx.text === 'W',
               },
               props: {
                 type: 'edit',
               },
               action: [
-                ({ record, table }) => {
-                  this.getDrawerForm('edit', record.id, table);
+                {
+                  type: 'drawerform',
+                  mode: 'edit',
+                  title: this.format({ id: 'edit' }),
+                  remoteValues: {
+                    url: '/api/release/detail.json',
+                    params: { id: '#{record.id}' },
+                    method: 'post',
+                  },
+                  fields: fieldsConfig('edit', this.format),
+                  submit: {
+                    url: '/api/release/edit.json',
+                    method: 'post',
+                    params: { id: '#{record.id}' },
+                    successMessage: this.format({ id: 'edit.success' }),
+                    finish: {
+                      type: 'refreshtable',
+                    },
+                  },
                 },
               ],
             },
@@ -254,8 +262,25 @@ class PublishRelease extends React.Component {
                 type: 'edit',
               },
               action: [
-                ({ record, table }) => {
-                  this.getDrawerForm('grayscaleEdit', record.id, table);
+                {
+                  type: 'drawerform',
+                  mode: 'edit',
+                  title: this.format({ id: 'edit' }),
+                  remoteValues: {
+                    url: '/api/release/detail.json',
+                    params: { id: '#{record.id}' },
+                    method: 'post',
+                  },
+                  fields: fieldsConfig('grayscale', this.format),
+                  submit: {
+                    url: '/api/release/edit.json',
+                    method: 'post',
+                    params: { id: '#{record.id}' },
+                    successMessage: this.format({ id: 'edit.success' }),
+                    finish: {
+                      type: 'refreshtable',
+                    },
+                  },
                 },
               ],
             },
@@ -265,19 +290,27 @@ class PublishRelease extends React.Component {
               text: this.format({ id: 'view' }),
               tooltip: this.format({ id: 'view' }),
               funcProps: {
-                visible: ctx => ctx.text === 'G',
+                visible: ctx => ctx.text === 'G' || ctx.text === 'W',
               },
               props: {
                 type: 'eye',
               },
               action: [
-                ({ record, table }) => {
-                  this.getDrawerForm('auditView', record.id, table);
+                {
+                  type: 'drawerform',
+                  mode: 'view',
+                  title: this.format({ id: 'view' }),
+                  remoteValues: {
+                    url: '/api/release/detail.json',
+                    params: { id: '#{record.id}' },
+                    method: 'post',
+                  },
+                  fields: fieldsConfig('grayscale', this.format),
                 },
               ],
             },
             {
-              // 审核中
+              // 审核
               type: 'icon',
               text: this.format({ id: 'audit' }),
               tooltip: this.format({ id: 'audit' }),
@@ -288,10 +321,91 @@ class PublishRelease extends React.Component {
                 type: 'link',
               },
               action: [
-                ({ record, table }) => {
-                  this.getDrawerForm('audit', record.id, table);
+                {
+                  type: 'drawerform',
+                  mode: 'edit',
+                  title: this.format({ id: 'audit' }),
+                  remoteValues: {
+                    url: '/api/release/detail.json',
+                    params: { id: '#{record.id}' },
+                    method: 'post',
+                  },
+                  submitButtonProps: {
+                    children: this.format({ id: 'submitAuditBtn.text' }),
+                  },
+                  fields: fieldsConfig('audit', this.format),
+                  submit: {
+                    url: '/api/release/audit.json',
+                    method: 'post',
+                    params: { id: '#{record.id}', action: 'W' },
+                    successMessage: this.format({
+                      id: 'confirm.successMessage',
+                    }),
+                    finish: {
+                      type: 'refreshtable',
+                    },
+                  },
                 },
               ],
+            },
+            {
+              // 灰度发布
+              type: 'icon',
+              text: this.format({ id: 'grayscale.release' }),
+              tooltip: this.format({ id: 'grayscale.release' }),
+              funcProps: {
+                visible: ctx => ctx.text === 'W',
+              },
+              props: {
+                type: 'cloudUpload',
+              },
+              action: [{
+                type: 'modalform',
+                title: this.format({ id: 'grayscale.release' }),
+                fields: [
+                  {
+                    name: 'grayScale',
+                    label: this.format({
+                      id: 'grayscale.change.button.action.label',
+                    }),
+                    field: {
+                      type: 'inputnumber',
+                      props: {
+                        placeholder: this.format({
+                          id: 'grayscale.change.button.action.placeholder',
+                        }),
+                        formatter: value => value && `${value}%`,
+                        style: { width: '100%' },
+                        max: 100,
+                        min: 10,
+                      },
+                    },
+                    rules: [
+                      {
+                        required: true,
+                        message: this.format({
+                          id: 'grayscale.change.button.action.placeholder',
+                        }),
+                      },
+                    ],
+                  },
+                ],
+                submit: {
+                  url: '/api/release/grayScaleRelease.json',
+                  method: 'post',
+                  convertParams: ctx => {
+                    return {
+                      ...ctx.params,
+                      id: ctx.record.id,
+                      action: 'G',
+                    };
+                  },
+                  successMessage: this.format({ id: 'confirm.successMessage' }),
+                  finish: {
+                    type: () => this.jumpSteps('G'),
+                  }
+                },
+              }]
             },
             {
               // 发布
@@ -312,16 +426,11 @@ class PublishRelease extends React.Component {
                 {
                   url: '/api/release/publish.json',
                   method: 'post',
-                  params: { action: 'R' },
-                  convertParams: ctx => {
-                    return {
-                      ...ctx.params,
-                      id: ctx.record.id,
-                    };
+                  params: { action: 'R', id: '#{record.id}' },
+                  successMessage: this.format({ id: 'confirm.successMessage' }),
+                  finish: {
+                    type: () => this.jumpSteps('R'),
                   },
-                },
-                () => {
-                  this.jumpSteps('R');
                 },
               ],
             },
@@ -344,13 +453,8 @@ class PublishRelease extends React.Component {
                 {
                   url: '/api/release/publish.json',
                   method: 'post',
-                  params: { action: 'O' },
-                  convertParams: ctx => {
-                    return {
-                      ...ctx.params,
-                      id: ctx.record.id,
-                    };
-                  },
+                  params: { action: 'O', id: '#{record.id}' },
+                  successMessage: this.format({ id: 'confirm.successMessage' }),
                 },
                 'refreshTable',
               ],
@@ -374,20 +478,19 @@ class PublishRelease extends React.Component {
                 {
                   url: '/api/release/publish.json',
                   method: 'post',
+                  successMessage: this.format({ id: 'confirm.successMessage' }),
                   convertParams: ctx => {
                     return {
                       ...ctx.params,
-                      action: ctx.text === 'R' ? 'G' : 'A',
+                      action: ctx.text === 'R' ? 'G' : 'W',
                       id: ctx.record.id,
                     };
                   },
-                },
-                ctx => {
-                  if (ctx.text === 'R') {
-                    this.jumpSteps('G');
-                  } else {
-                    this.jumpSteps('A');
-                  }
+                  finish: ctx => {
+                    ctx.text === 'R'
+                      ? this.jumpSteps('G')
+                      : this.jumpSteps('W');
+                  },
                 },
               ],
             },
@@ -411,11 +514,9 @@ class PublishRelease extends React.Component {
                 {
                   url: '/api/release/submitReview.json',
                   method: 'post',
-                  convertParams: ctx => {
-                    return {
-                      ...ctx.params,
-                      id: ctx.record.id,
-                    };
+                  successMessage: this.format({ id: 'confirm.successMessage' }),
+                  params: {
+                    id: '#{record.id}',
                   },
                 },
                 'refreshTable',
@@ -427,6 +528,7 @@ class PublishRelease extends React.Component {
     ],
 
     steps: [
+      // 步骤一配置
       {
         title: this.format({ id: 'waitPublish' }),
         remoteDataSource: {
@@ -446,7 +548,22 @@ class PublishRelease extends React.Component {
               type: 'primary',
               children: this.format({ id: 'create' }),
             },
-            action: [this.getDrawerForm('create'), 'refreshtable'],
+            action: [
+              {
+                type: 'drawerform',
+                title: this.format({ id: 'create' }),
+                mode: 'create',
+                fields: fieldsConfig('create', this.format),
+                submit: {
+                  url: '/api/release/create.json',
+                  method: 'post',
+                  successMessage: this.format({ id: 'create.success' }),
+                  finish: {
+                    type: 'refreshtable',
+                  },
+                },
+              },
+            ],
           },
           {
             type: 'button',
@@ -475,6 +592,7 @@ class PublishRelease extends React.Component {
           },
         ],
       },
+      // 步骤二配置
       {
         title: this.format({ id: 'grayscale' }),
         remoteDataSource: {
@@ -612,6 +730,7 @@ class PublishRelease extends React.Component {
           },
         ],
       },
+      // 步骤三配置
       {
         title: this.format({ id: 'publish' }),
         remoteDataSource: {
@@ -630,20 +749,12 @@ class PublishRelease extends React.Component {
 
   render() {
     return (
-      <>
-        <StepQueryTable
-          {...this.config}
-          ref={ref => {
-            this.stepQueryTableRef = ref;
-          }}
-        />
-        <ModalForm
-          type="drawer"
-          ref={ref => {
-            this.modalRef = ref;
-          }}
-        />
-      </>
+      <StepQueryTable
+        {...this.config}
+        ref={ref => {
+          this.stepQueryTableRef = ref;
+        }}
+      />
     );
   }
 }
