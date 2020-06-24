@@ -14,6 +14,7 @@ export default defineConfig({
   history: {
     type: 'hash',
   },
+  // https://umijs.org/plugins/plugin-layout#locale
   locale: {
     default: 'zh-CN',
     antd: true,

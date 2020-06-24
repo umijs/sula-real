@@ -1,5 +1,5 @@
 import React from 'react';
-import { StepQueryTable, ModalForm, Text } from 'sula';
+import { StepQueryTable, Text } from 'sula';
 import access from '@/components/access';
 import { fieldsConfig } from './config';
 
@@ -115,8 +115,8 @@ class PublishRelease extends React.Component {
         title: this.format({ id: 'status.title' }),
         width: 220,
         render: {
-          type: 'status',
-          max: 3,
+          type: 'statusRender',
+          max: 4,
           spaceSize: 'middle',
           props: {
             children: '#{text}',
@@ -134,7 +134,7 @@ class PublishRelease extends React.Component {
               },
               {
                 key: 'W',
-                value: '待灰度',
+                value: this.format({ id: 'grayscale.waitGrayscale' }),
                 color: 'volcano',
               },
               {
@@ -172,9 +172,7 @@ class PublishRelease extends React.Component {
               ),
               text: this.format({ id: 'audit.send' }),
               tooltip: this.format({ id: 'audit.send' }),
-              funcProps: {
-                visible: ctx => ctx.text === 'D',
-              },
+              visible: '#{text === "D"}',
               props: {
                 type: 'audit',
               },
@@ -196,9 +194,7 @@ class PublishRelease extends React.Component {
               type: 'icon',
               text: this.format({ id: 'view' }),
               tooltip: this.format({ id: 'view' }),
-              funcProps: {
-                visible: ctx => ctx.text === 'D' || ctx.text === 'A',
-              },
+              visible: '#{text === "D" || text === "A" || text === "W"}',
               props: {
                 type: 'eye',
               },
@@ -221,9 +217,7 @@ class PublishRelease extends React.Component {
               type: 'icon',
               text: this.format({ id: 'edit' }),
               tooltip: this.format({ id: 'edit' }),
-              funcProps: {
-                visible: ctx => ctx.text === 'D' || ctx.text === 'W',
-              },
+              visible: '#{text === "D" || text === "W"}',
               props: {
                 type: 'edit',
               },
@@ -255,9 +249,7 @@ class PublishRelease extends React.Component {
               type: 'icon',
               text: this.format({ id: 'edit' }),
               tooltip: this.format({ id: 'edit' }),
-              funcProps: {
-                visible: ctx => ctx.text === 'G',
-              },
+              visible: '#{text  === "G"}',
               props: {
                 type: 'edit',
               },
@@ -289,9 +281,7 @@ class PublishRelease extends React.Component {
               type: 'icon',
               text: this.format({ id: 'view' }),
               tooltip: this.format({ id: 'view' }),
-              funcProps: {
-                visible: ctx => ctx.text === 'G' || ctx.text === 'W',
-              },
+              visible: '#{text === "G"}',
               props: {
                 type: 'eye',
               },
@@ -314,9 +304,7 @@ class PublishRelease extends React.Component {
               type: 'icon',
               text: this.format({ id: 'audit' }),
               tooltip: this.format({ id: 'audit' }),
-              funcProps: {
-                visible: ctx => ctx.text === 'A',
-              },
+              visible: '#{text === "A"}',
               props: {
                 type: 'link',
               },
@@ -334,17 +322,63 @@ class PublishRelease extends React.Component {
                     children: this.format({ id: 'submitAuditBtn.text' }),
                   },
                   fields: fieldsConfig('audit', this.format),
-                  submit: {
-                    url: '/api/release/audit.json',
-                    method: 'post',
-                    params: { id: '#{record.id}', action: 'W' },
-                    successMessage: this.format({
-                      id: 'confirm.successMessage',
-                    }),
-                    finish: {
-                      type: 'refreshtable',
+                  // 抽屉自定义底部操作组
+                  actionsRender: [
+                    {
+                      type: 'button',
+                      props: {
+                        type: 'primary',
+                        children: this.format({ id: 'submitAuditBtn.text' }),
+                      },
+                      action: [
+                        'validateFields',
+                        {
+                          url: '/api/release/audit.json',
+                          method: 'post',
+                          params: { id: '#{record.id}', action: 'W' },
+                          convertParams: ctx => {
+                            return {
+                              ...ctx.params,
+                              ...ctx.result,
+                            };
+                          },
+                        },
+                        'refreshtable',
+                        'modalCancel',
+                      ],
                     },
-                  },
+                    {
+                      type: 'button',
+                      props: {
+                        type: 'primary',
+                        children: this.format({ id: 'submitAuditBtn.refuse' }),
+                        danger: true,
+                      },
+                      action: [
+                        'validateFields',
+                        {
+                          url: '/api/release/audit.json',
+                          method: 'post',
+                          params: { id: '#{record.id}', action: 'D' },
+                          convertParams: ctx => {
+                            return {
+                              ...ctx.params,
+                              ...ctx.result,
+                            };
+                          },
+                        },
+                        'refreshtable',
+                        'modalCancel',
+                      ],
+                    },
+                    {
+                      type: 'button',
+                      props: {
+                        children: this.format({ id: 'submitAuditBtn.back' }),
+                      },
+                      action: 'modalCancel',
+                    },
+                  ],
                 },
               ],
             },
@@ -353,59 +387,61 @@ class PublishRelease extends React.Component {
               type: 'icon',
               text: this.format({ id: 'grayscale.release' }),
               tooltip: this.format({ id: 'grayscale.release' }),
-              funcProps: {
-                visible: ctx => ctx.text === 'W',
-              },
+              visible: '#{text === "W"}',
               props: {
                 type: 'cloudUpload',
               },
-              action: [{
-                type: 'modalform',
-                title: this.format({ id: 'grayscale.release' }),
-                fields: [
-                  {
-                    name: 'grayScale',
-                    label: this.format({
-                      id: 'grayscale.change.button.action.label',
-                    }),
-                    field: {
-                      type: 'inputnumber',
-                      props: {
-                        placeholder: this.format({
-                          id: 'grayscale.change.button.action.placeholder',
-                        }),
-                        formatter: value => value && `${value}%`,
-                        style: { width: '100%' },
-                        max: 100,
-                        min: 10,
+              action: [
+                {
+                  type: 'modalform',
+                  title: this.format({ id: 'grayscale.release' }),
+                  fields: [
+                    {
+                      name: 'grayScale',
+                      label: this.format({
+                        id: 'grayscale.change.button.action.label',
+                      }),
+                      field: {
+                        type: 'inputnumber',
+                        props: {
+                          placeholder: this.format({
+                            id: 'grayscale.change.button.action.placeholder',
+                          }),
+                          formatter: value => value && `${value}%`,
+                          style: { width: '100%' },
+                          max: 100,
+                          min: 10,
+                        },
                       },
+                      rules: [
+                        {
+                          required: true,
+                          message: this.format({
+                            id: 'grayscale.change.button.action.placeholder',
+                          }),
+                        },
+                      ],
                     },
-                    rules: [
-                      {
-                        required: true,
-                        message: this.format({
-                          id: 'grayscale.change.button.action.placeholder',
-                        }),
-                      },
-                    ],
+                  ],
+                  submit: {
+                    url: '/api/release/grayScaleRelease.json',
+                    method: 'post',
+                    convertParams: ctx => {
+                      return {
+                        ...ctx.params,
+                        id: ctx.record.id,
+                        action: 'G',
+                      };
+                    },
+                    successMessage: this.format({
+                      id: 'confirm.successMessage',
+                    }),
+                    finish: {
+                      type: () => this.jumpSteps('G'),
+                    },
                   },
-                ],
-                submit: {
-                  url: '/api/release/grayScaleRelease.json',
-                  method: 'post',
-                  convertParams: ctx => {
-                    return {
-                      ...ctx.params,
-                      id: ctx.record.id,
-                      action: 'G',
-                    };
-                  },
-                  successMessage: this.format({ id: 'confirm.successMessage' }),
-                  finish: {
-                    type: () => this.jumpSteps('G'),
-                  }
                 },
-              }]
+              ],
             },
             {
               // 发布
@@ -416,9 +452,7 @@ class PublishRelease extends React.Component {
                 { id: 'confirm.title' },
                 { name: this.format({ id: 'publish' }) },
               ),
-              funcProps: {
-                visible: ctx => ctx.text === 'G' || ctx.text === 'O',
-              },
+              visible: '#{text === "G" || text === "O"}',
               props: {
                 type: 'cloudUpload',
               },
@@ -443,9 +477,7 @@ class PublishRelease extends React.Component {
                 { id: 'confirm.title' },
                 { name: this.format({ id: 'status.offline' }) },
               ),
-              funcProps: {
-                visible: ctx => ctx.text === 'R',
-              },
+              visible: '#{text === "R"}',
               props: {
                 type: 'cloudDownload',
               },
@@ -468,11 +500,9 @@ class PublishRelease extends React.Component {
                 { id: 'confirm.title' },
                 { name: this.format({ id: 'status.rollback' }) },
               ),
+              visible: '#{text === "R" || text === "G"}',
               props: {
                 type: 'redo',
-              },
-              funcProps: {
-                visible: ctx => ctx.text === 'R' || ctx.text === 'G',
               },
               action: [
                 {
@@ -503,10 +533,7 @@ class PublishRelease extends React.Component {
                 { name: this.format({ id: 'delete' }) },
               ),
               tooltip: this.format({ id: 'delete' }),
-              funcProps: {
-                visible: ctx =>
-                  ctx.text === 'D' || ctx.text === 'A' || ctx.text === 'O',
-              },
+              visible: '#{text !== "R"}',
               props: {
                 type: 'delete',
               },
@@ -537,9 +564,6 @@ class PublishRelease extends React.Component {
             status: 'noPublish',
           },
           method: 'post',
-          converter: ({ data }) => {
-            return data;
-          },
         },
         actionsRender: [
           {
@@ -601,9 +625,6 @@ class PublishRelease extends React.Component {
             status: 'grayscale',
           },
           method: 'post',
-          converter: ({ data }) => {
-            return data;
-          },
         },
         actionsRender: [
           {
@@ -717,7 +738,7 @@ class PublishRelease extends React.Component {
                   convertParams: ctx => {
                     return {
                       ...ctx.params,
-                      getSelectedRows: ctx.table.getSelectedRows(),
+                      grayscaleList: ctx.table.getSelectedRows(),
                     };
                   },
                   successMessage: this.format({
@@ -739,9 +760,6 @@ class PublishRelease extends React.Component {
             status: 'publish',
           },
           method: 'post',
-          converter: ({ data }) => {
-            return data;
-          },
         },
       },
     ],

@@ -47,7 +47,7 @@ class Avatar extends React.Component {
     const uploadButton = (
       <div>
         {this.state.loading ? <LoadingOutlined /> : <PlusOutlined />}
-        <div className="ant-upload-text">
+        <div>
           {this.props.formatMessage({ id: 'uploadIcon' })}
         </div>
       </div>
@@ -57,7 +57,6 @@ class Avatar extends React.Component {
       <Upload
         name="avatar"
         listType="picture-card"
-        className="avatar-uploader"
         showUploadList={false}
         beforeUpload={beforeUpload}
         onChange={this.handleChange}

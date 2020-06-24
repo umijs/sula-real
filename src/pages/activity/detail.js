@@ -223,7 +223,6 @@ class ActivityDetail extends React.Component {
               {
                 name: 'activityType',
                 label: this.format({ id: 'activity.activityType' }),
-                initialValue: '无',
                 field: {
                   type: 'select',
                   props: {
@@ -258,7 +257,6 @@ class ActivityDetail extends React.Component {
                     }),
                   },
                 },
-                initialValue: '无',
                 initialSource: [
                   {
                     text: this.format({
@@ -277,7 +275,6 @@ class ActivityDetail extends React.Component {
               {
                 name: 'activityDesc',
                 label: this.format({ id: 'activity.activityDesc' }),
-                initialValue: '无',
                 field: {
                   type: 'textarea',
                   props: {

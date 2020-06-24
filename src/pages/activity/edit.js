@@ -483,7 +483,7 @@ class ActivityEdit extends React.Component {
         ],
       },
     ],
-    result: true,
+    result: true, // 显示结果页
     submit: {
       url: '/api/activity/update.json',
       method: 'post',
@@ -495,7 +495,6 @@ class ActivityEdit extends React.Component {
           : {}),
       },
     },
-    actionsPosition: 'bottom',
     remoteValues: {
       url: '/api/activity/detail.json',
       params: {

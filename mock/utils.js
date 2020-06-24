@@ -48,7 +48,7 @@ export function statusFilter(status, dataSource) {
   }
 }
 
-function getPagingData(dataSource, ...options) {
+export function getPagingData(dataSource, ...options) {
   const [
     { current, pageSize },
     filters = {},
@@ -129,7 +129,7 @@ function getPagingData(dataSource, ...options) {
   };
 }
 
-const getManageData = (body, dataSource, nopag) => {
+export const getManageData = (body, dataSource, nopag) => {
   const { filters, pageSize, current, sorter } =
     typeof body === 'string' ? JSON.parse(body) : body;
   return getPagingData(
@@ -140,5 +140,3 @@ const getManageData = (body, dataSource, nopag) => {
     nopag,
   );
 };
-
-export { getPagingData, getManageData };

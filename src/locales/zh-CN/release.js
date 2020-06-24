@@ -26,6 +26,8 @@ export default {
 
   'submitBtn.text': '更新',
   'submitAuditBtn.text': '通过',
+  'submitAuditBtn.refuse': '拒绝',
+  'submitAuditBtn.back': '返回',
 
   'direction.placeholder': '简短地介绍你的迭代',
 
@@ -33,6 +35,7 @@ export default {
   'proportionGrayscale.placeholder': '请输入灰度比例',
 
   grayscale: '灰度中',
+  'grayscale.waitGrayscale': '待灰度',
   'grayscale.release': '灰度发布',
   
   'grayscale.button.confirm': '确认要批量发布吗？',

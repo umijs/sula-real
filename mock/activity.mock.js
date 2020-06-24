@@ -50,7 +50,7 @@ for (let i = 0; i < 200; i += 1) {
     subtitle: Random.title(),
     other: Random.sentence(),
     activityMonth: [Random.date().valueOf(), Random.date().valueOf()],
-    activityTime: [startTime, startTime + 1111111],
+    activityTime: [startTime, startTime + 1200000],
   });
 }
 
@@ -86,10 +86,6 @@ function getPagingData(dataSource, ...options) {
         }
         if (typeof cellValue !== 'number' && !cellValue) {
           return true;
-        }
-
-        if (key === 'id') {
-          return `${SERIAL}${cellValue}`.includes(filterValue);
         }
 
         return cellValue.includes(filterValue);

@@ -4,12 +4,6 @@ import access from '@/components/access';
 
 class ActivityManage extends React.Component {
   format = this.props.formatMessage;
-  
-  componentWillUnmount() {
-    this.setState = () => {
-      return
-    }
-  }
 
   config = {
     rowKey: 'id',
@@ -42,7 +36,7 @@ class ActivityManage extends React.Component {
         title: this.format({ id: 'activity.operator' }),
         render: {
           type: 'operationgroup',
-          max: 2,
+          max: 3,
           actionsRender: [
             {
               type: 'icon',

@@ -11,7 +11,7 @@ const { registerRenderPlugin, registerFieldPlugin, registerPlugin } = sula;
 /** render插件 */
 registerRenderPlugin('dropdown')(Dropdown, true);
 
-registerRenderPlugin('status')(StatusRender, true);
+registerRenderPlugin('statusRender')(StatusRender, true);
 
 registerRenderPlugin('operationgroup')(OperationGroup, true);
 
@@ -19,13 +19,13 @@ registerRenderPlugin('operationgroup')(OperationGroup, true);
 registerFieldPlugin('timerangepicker')(TimeRangePicker);
 
 /** convertParams */
-registerPlugin('convertParams', 'addIdToParams', ctx => {
-  // convertParams插件，params: {id: xxx} json化
-  const { params } = ctx;
-  const { hash } = window.location;
-  const id = hash.split('/').reverse()[0];
-  return {
-    ...params,
-    id,
-  };
-});
+// registerPlugin('convertParams', 'addIdToParams', ctx => {
+//   // convertParams插件，params: {id: xxx} json化
+//   const { params } = ctx;
+//   const { hash } = window.location;
+//   const id = hash.split('/').reverse()[0];
+//   return {
+//     ...params,
+//     id,
+//   };
+// });

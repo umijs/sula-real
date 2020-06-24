@@ -1,8 +1,8 @@
 import React from 'react';
+import { Switch } from 'antd';
 import { CreateForm } from 'sula';
 import Upload from '@/components/avatarUpload';
 import access from '@/components/access';
-import { Switch } from 'antd';
 
 class FlowDetail extends React.Component {
   format = this.props.formatMessage;
@@ -29,7 +29,7 @@ class FlowDetail extends React.Component {
     );
   };
 
-  onModeChange = checked => {
+  onModeChange = (checked) => {
     this.setState({
       mode: checked ? 'edit' : 'view',
     });
@@ -41,8 +41,7 @@ class FlowDetail extends React.Component {
       type: 'div',
       props: {
         style: {
-          maxWidth: 1920,
-          margin: '0 auto 72px',
+          marginBottom: 64,
         },
       },
     },
@@ -91,9 +90,9 @@ class FlowDetail extends React.Component {
             field: {
               type: 'select',
               props: {
-                placeholder: `${this.format({
+                placeholder: this.format({
                   id: 'flow.type.placeholder',
-                })}`,
+                }),
               },
             },
             rules: [
@@ -138,9 +137,9 @@ class FlowDetail extends React.Component {
             field: {
               type: 'input',
               props: {
-                placeholder: `${this.format({
+                placeholder: this.format({
                   id: 'flow.description.placeholder',
-                })}`,
+                }),
               },
             },
           },
@@ -270,11 +269,9 @@ class FlowDetail extends React.Component {
           {
             name: 'icon',
             label: this.format({ id: 'flow.icon' }),
-            field: {
-              type: ctx => {
-                const { mode } = ctx; // 自定义表单组件
-                return <Upload mode={mode} />;
-              },
+            field: (ctx) => {
+              const { mode } = ctx; // 自定义表单组件
+              return <Upload mode={mode} />;
             },
           },
           {

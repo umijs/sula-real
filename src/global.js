@@ -18,19 +18,14 @@ import {
   CloudDownloadOutlined,
   CloudServerOutlined,
   CaretDownOutlined,
-  EllipsisOutlined
+  EllipsisOutlined,
 } from '@ant-design/icons';
 import Mock from 'mockjs';
 
 import 'antd/dist/antd.min.css';
 import './plugins';
 
-import '../mock/flow.mock';
-import '../mock/activity.mock';
-import '../mock/event.mock';
-import '../mock/login.mock';
-import '../mock/release.mock';
-import '../mock/charts.mock';
+import '../mock/index.mock';
 
 Mock.setup({
   timeout: '500-1200',
@@ -43,18 +38,18 @@ Icon.iconRegister({
   upload: UploadOutlined,
   create: PlusOutlined,
   eye: EyeOutlined,
-  delete: DeleteOutlined, // 删除
+  delete: DeleteOutlined,
   copy: CopyOutlined,
-  redo: RedoOutlined, // 回退
+  redo: RedoOutlined,
   logout: LogoutOutlined,
   link: LinkOutlined,
   rocket: RocketOutlined,
   leftSquare: LeftSquareOutlined,
 
-  cloudUpload: CloudUploadOutlined, // 发布
-  cloudDownload: CloudDownloadOutlined, // 下线
-  audit: AuditOutlined, // 提交审核
-  cloudServer: CloudServerOutlined, // 审核
-  caretDown: CaretDownOutlined, // 向下三角形
-  ellipsis: EllipsisOutlined, // 三点
+  cloudUpload: CloudUploadOutlined,
+  cloudDownload: CloudDownloadOutlined,
+  audit: AuditOutlined,
+  cloudServer: CloudServerOutlined,
+  caretDown: CaretDownOutlined,
+  ellipsis: EllipsisOutlined,
 });

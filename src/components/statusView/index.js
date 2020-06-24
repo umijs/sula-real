@@ -37,7 +37,7 @@ class StatusView extends React.Component {
                 index === statusList.length - 1 && 'propoverDisplayNone',
               )}
             >
-              <Icon className="icon" type="caretDown" />
+              <Icon type="caretDown" />
             </span>
           </div>
         );

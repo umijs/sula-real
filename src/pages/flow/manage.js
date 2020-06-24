@@ -96,7 +96,7 @@ class FlowManage extends React.Component {
         key: 'name',
         title: this.format({ id: 'flow.name' }),
         render: ({ text, record }) => {
-          // 内置link插件组件写法
+          // 支持自定义组件
           return <a href={`#/flow/view/${record.id}`}>{text}</a>;
         },
       },
@@ -112,9 +112,15 @@ class FlowManage extends React.Component {
         key: 'status',
         width: '400px',
         title: this.format({ id: 'flow.status' }),
-        render: ctx => {
+        render: (ctx) => {
           // 自定义操作列
-          return <StatusFlow status={ctx.text} statusConfig={this.statusConfig} {...ctx} />;
+          return (
+            <StatusFlow
+              status={ctx.text}
+              statusConfig={this.statusConfig}
+              {...ctx}
+            />
+          );
         },
       },
     ],
@@ -139,7 +145,7 @@ class FlowManage extends React.Component {
         },
       },
       expandable: {
-        expandedRowRender: record => {
+        expandedRowRender: (record) => {
           return <div style={{ marginLeft: 20 }}>{record.description}</div>;
         },
       },

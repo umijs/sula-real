@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row, Col } from 'antd';
 
-class Wrapper extends React.Component {
+class PicWrapper extends React.Component {
   render() {
     const { children, url } = this.props;
     return (
@@ -15,14 +15,11 @@ class Wrapper extends React.Component {
             overflow: 'hidden',
           }}
         >
-          <img
-            src={url}
-            height="100%"
-          />
+          <img src={url} height="100%" />
         </Col>
       </Row>
     );
   }
 }
 
-export default Wrapper;
+export default PicWrapper;

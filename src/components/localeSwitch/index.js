@@ -4,7 +4,7 @@ import { getLocale, setLocale } from 'umi';
 
 import styles from './index.less';
 
-export default props => {
+export default () => {
   const localeUrl = {
     en: 'https://img.alicdn.com/tfs/TB1GdeYri_1gK0jSZFqXXcpaXXa-24-24.png',
     zh: 'https://img.alicdn.com/tfs/TB1AQ50reH2gK0jSZJnXXaT1FXa-24-24.png',

@@ -26,6 +26,8 @@ export default {
 
   'submitBtn.text': 'Update',
   'submitAuditBtn.text': 'Pass',
+  'submitAuditBtn.refuse': 'Refuse',
+  'submitAuditBtn.back': 'Back',
 
   'direction.placeholder': 'briefly introduce your iteration',
 
@@ -33,6 +35,7 @@ export default {
   'proportionGrayscale.placeholder': 'please input gray scale',
 
   grayscale: 'Grayscale',
+  'grayscale.waitGrayscale': 'WaitGrayscale',
   'grayscale.release': 'Grayscale Release',
   'grayscale.button.confirm': 'confirm to batch release',
   'grayscale.button.text': 'Release',

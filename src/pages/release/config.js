@@ -126,4 +126,4 @@ export const fieldsConfig = (type, format) => {
     fields.splice(fields.length - 1, 0, fieldsTem);
   }
   return fields;
-}
+};

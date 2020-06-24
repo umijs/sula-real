@@ -12,7 +12,7 @@ class EventDetail extends React.Component {
 
   format = this.props.formatMessage;
 
-  setLoading = loading => {
+  setLoading = (loading) => {
     this.setState({
       loading,
     });
@@ -75,7 +75,7 @@ class EventDetail extends React.Component {
     },
   };
 
-  onTabChange = key => {
+  onTabChange = (key) => {
     this.setState({ key });
   };
 
@@ -103,7 +103,7 @@ class EventDetail extends React.Component {
                 color: '#{text === "online" ? "success" : "error"}',
               },
               funcProps: {
-                children: ctx => {
+                children: (ctx) => {
                   return this.format({
                     id:
                       ctx.text === 'online'
@@ -142,7 +142,6 @@ class EventDetail extends React.Component {
   render() {
     return (
       <Card
-        style={{ width: '100%' }}
         tabList={this.tabListNoTitle}
         activeTabKey={this.state.key}
         tabBarExtraContent={
@@ -154,12 +153,12 @@ class EventDetail extends React.Component {
             {this.format({ id: 'back' })}
           </Button>
         }
-        onTabChange={key => {
+        onTabChange={(key) => {
           this.onTabChange(key);
         }}
       >
         <Spin spinning={this.state.loading}>
-          {Object.keys(this.contentList).map(key => (
+          {Object.keys(this.contentList).map((key) => (
             <div
               key={key}
               style={{ display: key === this.state.key ? '' : 'none' }}

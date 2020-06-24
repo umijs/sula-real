@@ -51,7 +51,6 @@ export default [
       {
         path: '/event/manage',
         name: 'manage',
-        // hideInMenu: true,
         component: './event/manage',
       },
       {
@@ -79,7 +78,6 @@ export default [
       {
         path: '/flow/manage',
         name: 'manage',
-        // hideInMenu: true,
         component: './flow/manage',
       },
       {
@@ -113,7 +111,6 @@ export default [
       {
         path: '/activity/manage',
         name: 'manage',
-        // hideInMenu: true,
         component: './activity/manage',
       },
       {
