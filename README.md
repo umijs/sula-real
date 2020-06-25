@@ -7,6 +7,34 @@
 - 🥗 除 [sula](https://github.com/umijs/sula-real) 外，仅依赖 [@umijs/preset-react](https://umijs.org/plugins/preset-react) 和 [@ant-design/pro-layout](https://github.com/ant-design/ant-design-pro-layout)
 
 
+## 主题
+
+```js
+import { DarkGreen } from './theme';
+
+export default {
+  theme: DarkGreen
+};
+```
+
+<table>
+  <tbody>
+    <tr>
+      <td align="center">
+        <a target="_blank" href="https://umijs.org">
+          <img
+            width="32"
+            src="https://img.alicdn.com/tfs/TB1fHnUb_M11u4jSZPxXXahcXXa-2876-1414.png"
+          />
+          <br>
+          <strong>DarkGreen</strong>
+        </a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
 ## 启动
 
 ```bash
