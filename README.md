@@ -10,10 +10,10 @@
 ## 主题
 
 ```js
-import { DarkGreen } from './theme';
+import { IrisBlue } from './theme';
 
 export default {
-  theme: DarkGreen
+  theme: IrisBlue
 };
 ```
 
@@ -27,7 +27,7 @@ export default {
             src="https://img.alicdn.com/tfs/TB1fHnUb_M11u4jSZPxXXahcXXa-2876-1414.png"
           />
           <br>
-          <strong>DarkGreen</strong>
+          <strong>IrisBlue</strong>
         </a>
       </td>
     </tr>
