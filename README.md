@@ -21,9 +21,9 @@ export default {
   <tbody>
     <tr>
       <td align="center">
-        <a target="_blank" href="https://umijs.org">
+        <a target="_blank" href="https://img.alicdn.com/tfs/TB1fHnUb_M11u4jSZPxXXahcXXa-2876-1414.png">
           <img
-            width="32"
+            width="256"
             src="https://img.alicdn.com/tfs/TB1fHnUb_M11u4jSZPxXXahcXXa-2876-1414.png"
           />
           <br>
