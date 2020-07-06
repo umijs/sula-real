@@ -21,8 +21,6 @@ export default defineConfig({
     antd: true,
     baseNavigator: true,
   },
-  // https://github.com/umijs/umi/issues/4363
-  title: false,
   routes,
   ignoreMomentLocale: true,
   layout: {
