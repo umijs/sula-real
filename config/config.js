@@ -8,6 +8,9 @@ export default defineConfig({
       default: 'zh-CN',
     },
   },
+  extraBabelPlugins: [
+    ['import', { libraryName: "antd", style: true }],
+  ],
   nodeModulesTransform: {
     type: 'none',
   },

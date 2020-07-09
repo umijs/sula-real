@@ -12,10 +12,11 @@
     "@antv/g6": "^3.5.6",
     "@sula/charts": "^1.0.0-alpha.6",
     "antd": "^4.3.1",
-    "sula": "^1.0.0-alpha.44"
+    "sula": "^1.0.0-beta.1"
   },
   "devDependencies": {
     "@umijs/preset-react": "^1.5.8",
+    "babel-plugin-import": "^1.13.0",
     "mockjs": "^1.1.0",
     "umi": "^3.2.3",
     "umi-plugin-sula": "^1.0.0-alpha.5"

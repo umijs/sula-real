@@ -22,7 +22,6 @@ import {
 } from '@ant-design/icons';
 import Mock from 'mockjs';
 
-import 'antd/dist/antd.min.css';
 import './plugins';
 
 import '../mock/index.mock';
