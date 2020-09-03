@@ -45,7 +45,7 @@ function AvatarDropdown() {
         }}
         size={26}
       >
-        {initialState.currentUser}
+        {initialState?.currentUser}
       </Avatar>
     </Dropdown>
   );

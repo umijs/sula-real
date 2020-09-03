@@ -7,12 +7,7 @@ import style from './index.less';
 
 const redirectToPage = () => {
   const urlParams = new URL(window.location.href);
-  const params = parse(
-    window.location.href
-      .split('?')
-      .slice(1)
-      .join('?'),
-  );
+  const params = parse(window.location.href.split('?').slice(1).join('?'));
   let { redirect, ...rest } = params;
 
   if (redirect) {
@@ -135,7 +130,7 @@ function LoginForm() {
     ],
   };
 
-  const handleSubmit = async values => {
+  const handleSubmit = async (values) => {
     try {
       const res = await request({
         url: '/api/login.json',
