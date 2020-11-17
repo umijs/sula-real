@@ -9,7 +9,8 @@ export default defineConfig({
     },
   },
   extraBabelPlugins: [
-    ['import', { libraryName: "antd", style: true }],
+    // libraryDirectory: 'es' 必须这样写
+    ['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }],
   ],
   nodeModulesTransform: {
     type: 'none',
@@ -22,12 +23,12 @@ export default defineConfig({
   locale: {
     default: 'zh-CN',
     antd: true,
-    baseNavigator: true,
+    baseNavigator: false,
   },
   routes,
   ignoreMomentLocale: true,
   layout: {
     locale: true,
   },
-  theme: IrisBlue
+  theme: IrisBlue,
 });

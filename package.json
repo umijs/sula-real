@@ -2,13 +2,14 @@
   "private": true,
   "description": "sula real",
   "scripts": {
-    "start": "umi dev",
+    "start": "npm run dev",
+    "dev": "umi dev",
     "build": "umi build",
     "predeploy": "npm run build",
     "deploy": "now deploy ./dist --name real --prod"
   },
   "dependencies": {
-    "@ant-design/pro-layout": "^6.2.5",
+    "@ant-design/pro-layout": "^6.4.19",
     "@antv/g6": "^3.5.6",
     "@sula/charts": "^1.0.0-alpha.6",
     "antd": "^4.3.1",
