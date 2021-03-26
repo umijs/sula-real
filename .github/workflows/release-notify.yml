@@ -18,6 +18,6 @@ jobs:
               "msgtype": "markdown",
               "markdown": {
                   "title": "${{github.event.release.tag_name}} released",
-                  "text": "# [${{github.event.release.tag_name}}](${{github.event.release.html_url}}) released:\n${{github.event.release.body}} \n[预览](https://real.sula.now.sh/)"
+                  "text": "# [${{github.event.release.tag_name}}](${{github.event.release.html_url}}) released:\n${{github.event.release.body}} \n\n[预览](https://real.sula.now.sh/)"
               }
             }
