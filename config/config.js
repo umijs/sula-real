@@ -1,6 +1,6 @@
 import { defineConfig } from 'umi';
 import routes from './route.config';
-import { IrisBlue } from './theme';
+import { IrisBlue, GeekBlue } from './theme';
 
 export default defineConfig({
   sula: {
@@ -30,5 +30,5 @@ export default defineConfig({
   layout: {
     locale: true,
   },
-  theme: IrisBlue,
+  theme: GeekBlue,
 });

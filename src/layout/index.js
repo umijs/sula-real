@@ -15,9 +15,7 @@ class LayoutComponent extends React.Component {
         history={history}
         locale={getLocale() === 'zh-CN' ? zhCN : enUS}
       >
-        <PageHeaderWrapper title={false}>
-          <div style={{ maxWidth: 1920, margin: '0 auto' }}>{children}</div>
-        </PageHeaderWrapper>
+        <PageHeaderWrapper title={false}><div style={{height: '100%'}}>{children}</div></PageHeaderWrapper>
       </ConfigProvider>
     );
   }

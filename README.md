@@ -13,7 +13,7 @@
 import { IrisBlue } from './theme';
 
 export default {
-  theme: IrisBlue
+  theme: IrisBlue, // GeekBlue
 };
 ```
 

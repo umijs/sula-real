@@ -2,6 +2,7 @@ import React from 'react';
 import { request } from 'sula';
 import { history, getLocale, Link } from 'umi';
 import RightContent from '@/components/rightContent';
+import { BasicLayoutProps, DefaultFooter } from '@ant-design/pro-layout';
 
 //  https://umijs.org/zh-CN/plugins/plugin-initial-state
 export async function getInitialState() {
@@ -34,11 +35,11 @@ export async function getInitialState() {
 }
 
 // https://umijs.org/zh-CN/plugins/plugin-layout
-export const layout = () => {
+export const layout = (): BasicLayoutProps => {
   return {
     title: 'Sula-Real',
     logo: 'https://img.alicdn.com/tfs/TB1GfPJxYH1gK0jSZFwXXc7aXXa-56-56.svg',
-    style: { height: '100vh' },
+    siderWidth: 208,
     breadcrumbRender: (routers = []) => {
       return [
         {
@@ -59,5 +60,32 @@ export const layout = () => {
     },
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
+    waterMarkProps: {
+      content: 'Sula Real',
+      fontSize: 13,
+    },
+    footerRender: () => (
+      <DefaultFooter
+        links={[
+          {
+            key: 'sula-real',
+            title: 'Sula Real',
+            href: 'https://github.com/umijs/sula-real',
+          },
+          {
+            key: 'logo',
+            title: (
+              <img
+                src="https://img.alicdn.com/tfs/TB1GfPJxYH1gK0jSZFwXXc7aXXa-56-56.svg"
+                width="14px"
+              />
+            ),
+            href: 'https://github.com/umijs/sula-real',
+          },
+          { key: 'sula', title: 'Sula', href: 'https://github.com/umijs/sula' },
+        ]}
+        copyright="Sula.JS"
+      />
+    ),
   };
 };
